@@ -9,7 +9,14 @@
       "Bash(npm test:*)",
       "Bash(dotnet list:*)",
       "Bash(git check-ignore:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nComplete AI Resume Generator with all features\n\nFeatures:\n- ✨ Post-generation resume editor \\(edit all fields before download\\)\n- 📄 Direct PDF download using jsPDF \\(no print dialog\\)\n- 🌍 Dual language support \\(Danish/English for UI and CV output\\)\n- 📝 File upload and LinkedIn paste input\n- 🎨 Template-based resume generation\n- 🤖 Local AI with Ollama \\(privacy-first, no data leaves machine\\)\n- ✉️ Cover letter generation\n- 📱 Phone number formatting \\(Danish/US\\)\n- 🔍 Translation system for full i18n support\n\nTechnical Stack:\n- Backend: .NET 10, C# with Ollama integration\n- Frontend: React 18, TypeScript, jsPDF\n- Testing: xUnit \\(backend\\), Jest + RTL \\(frontend\\)\n- AI: Ollama \\(local\\) with optional Claude API support\n\nTests:\n- ✅ 18/18 backend tests passing \\(phone formatting, timeout handling, service tests\\)\n- ✅ 22/22 frontend tests passing \\(components, translations, rendering\\)\n\nDocumentation:\n- SETUP.md - Installation and configuration guide\n- EDITOR-AND-TESTS.md - Editor feature and testing guide\n- LATEST-FIXES.md - PDF generation fixes\n- TEST-FIXES.md - Test suite fixes\n\nSecurity:\n- No API keys committed \\(only placeholders\\)\n- User data \\(PDFs\\) excluded via .gitignore\n- Secrets properly handled via user-secrets/environment variables\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(wc:*)"
     ]
   }
 }
