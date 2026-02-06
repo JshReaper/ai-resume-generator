@@ -38,10 +38,11 @@ npm install
 ### 4. Start Ollama
 
 ```bash
-# Download the model (one-time)
-ollama pull llama3.1:8b
+# Download the model (one-time, ~8GB download)
+ollama pull qwen2.5:14b
 
 # Ollama runs as a service on localhost:11434
+# First load takes 15-30s to load model into VRAM
 ```
 
 ## Running the Application

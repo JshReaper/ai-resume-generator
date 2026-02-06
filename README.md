@@ -69,7 +69,7 @@
 
 **1. Install Ollama and pull the model:**
 ```bash
-ollama pull llama3.1:8b
+ollama pull qwen2.5:14b
 ```
 
 **2. Clone and setup:**
@@ -170,7 +170,7 @@ Upload CV → Refine → Generate → Edit → Download PDF
   },
   "Ollama": {
     "BaseUrl": "http://localhost:11434",
-    "Model": "llama3.1:8b"
+    "Model": "qwen2.5:14b"
   }
 }
 ```
@@ -195,14 +195,14 @@ dotnet user-secrets set "Claude:ApiKey" "sk-ant-your-key"
 ### Alternative Ollama Models
 
 ```bash
-# Faster (smaller)
-ollama pull llama3.1:7b
+# Faster (smaller, ~8GB VRAM)
+ollama pull llama3.1:8b
 
-# Better quality (needs more VRAM)
-ollama pull qwen2.5:14b
+# Largest (best quality, ~20GB VRAM)
+ollama pull qwen2.5:32b
 
 # Update appsettings.json
-"Model": "qwen2.5:14b"
+"Model": "llama3.1:8b"  # or "qwen2.5:32b"
 ```
 
 ## 🧪 Testing
@@ -252,11 +252,19 @@ npm test
 
 ## 📊 Performance
 
-With recommended specs (Ryzen 9, 32GB RAM, modern GPU):
-- Model loading: 10-20s (first request only)
-- CV analysis: 5-15s
-- Resume generation: 10-20s
+With qwen2.5:14b on strong GPU (RTX 4090, 24GB VRAM):
+- Model loading: 15-30s (first request only)
+- CV analysis: 8-20s
+- Resume generation: 15-30s
+- Cover letter: 10-25s
 - PDF export: <1s (instant)
+
+**Model Comparison:**
+| Model | VRAM | Speed | Quality | Recommended For |
+|-------|------|-------|---------|-----------------|
+| llama3.1:8b | ~8GB | Fast | Good | Quick iterations |
+| qwen2.5:14b | ~14GB | Medium | Excellent | **Default (balanced)** |
+| qwen2.5:32b | ~20GB | Slower | Best | Maximum quality |
 
 ## 🐛 Troubleshooting
 

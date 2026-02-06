@@ -45,13 +45,15 @@ Complete feature list and technical implementation notes for the AI Resume Gener
 
 **AI Providers:**
 - **Ollama** (default): Free, local, privacy-first
-  - Model: llama3.1:8b
+  - Model: qwen2.5:14b (excellent quality, balanced performance)
+  - Alternative: llama3.1:8b (faster), qwen2.5:32b (best quality)
   - No API key required
   - Data never leaves your machine
+  - ~14GB VRAM required for 14b model
 - **Claude API** (optional): Cloud-based alternative
   - Model: claude-sonnet-4
   - Requires API key
-  - Better quality responses
+  - Comparable quality to qwen2.5:14b
 
 **Configuration:**
 ```json
@@ -59,9 +61,17 @@ Complete feature list and technical implementation notes for the AI Resume Gener
 {
   "AI": {
     "Provider": "Ollama"  // or "Claude"
+  },
+  "Ollama": {
+    "Model": "qwen2.5:14b"  // Default: balanced quality/performance
   }
 }
 ```
+
+**Model Selection:**
+- `qwen2.5:14b` - **Recommended** (excellent quality, ~14GB VRAM)
+- `llama3.1:8b` - Faster, lower VRAM (~8GB)
+- `qwen2.5:32b` - Best quality, slower (~20GB VRAM)
 
 ---
 
