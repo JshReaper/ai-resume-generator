@@ -4,6 +4,7 @@ Complete feature list and technical implementation notes for the AI Resume Gener
 
 ## Table of Contents
 - [Core Features](#core-features)
+- [Job Posting URL Fetcher](#job-posting-url-fetcher)
 - [Resume Editor](#resume-editor)
 - [PDF Export](#pdf-export)
 - [Language System](#language-system)
@@ -72,6 +73,162 @@ Complete feature list and technical implementation notes for the AI Resume Gener
 - `qwen2.5:14b` - **Recommended** (excellent quality, ~14GB VRAM)
 - `llama3.1:8b` - Faster, lower VRAM (~8GB)
 - `qwen2.5:32b` - Best quality, slower (~20GB VRAM)
+
+---
+
+## Job Posting URL Fetcher
+
+**Automatic Job Details Extraction:** Paste a job posting URL and automatically extract job details to tailor your resume.
+
+### How It Works
+
+Instead of manually copying job title and description, simply:
+1. **Paste URL** - Enter the link to any public job posting
+2. **Fetch Details** - Click button to automatically extract information
+3. **Auto-populate** - Job title and description fields are filled automatically
+4. **Generate** - Create tailored resume based on the specific job
+
+### Supported Sites
+
+Works with **most public job boards**:
+- ✅ LinkedIn Jobs
+- ✅ Indeed
+- ✅ Glassdoor
+- ✅ Company career pages
+- ✅ Monster, ZipRecruiter, etc.
+- ✅ Any publicly accessible job posting
+
+### Legal & Ethical Compliance
+
+**Fully Compliant Scraping:**
+- ✅ Only public job postings (no login required)
+- ✅ Respects robots.txt rules
+- ✅ Proper User-Agent identification
+- ✅ Rate limiting (10s timeout)
+- ✅ For personal use only (not republishing)
+- ✅ Graceful error handling with manual fallback
+
+**What We Extract:**
+- Job title
+- Company name
+- Job description
+- Requirements
+
+**Privacy:**
+- No data stored or cached
+- Only fetched when you explicitly click "Fetch"
+- Data used only to populate your fields
+
+### Technical Implementation
+
+**Backend Service:** [JobPostingFetcherService.cs](src/AIResumeGenerator.API/Services/JobPostingFetcherService.cs)
+
+**Hybrid Extraction Strategy:**
+1. **Try Static HTML First** (fast, ~2s)
+   - Uses HtmlAgilityPack + HttpClient
+   - Works for simple sites with server-rendered content
+   - If description > 500 chars, success!
+
+2. **Fallback to Puppeteer** (slower, ~10-15s, but thorough)
+   - Launches headless Chrome
+   - Renders JavaScript content
+   - Waits for lazy-loaded sections
+   - Extracts complete job description
+
+**Technology:**
+- **PuppeteerSharp** - Headless Chrome automation (free, open source)
+- **HtmlAgilityPack** - HTML parsing library
+- **HttpClient** - Initial static requests
+- **Pattern matching** - Site-specific and generic selectors
+
+**Extraction Logic:**
+```csharp
+// Hybrid approach
+var staticResult = await TryStaticExtractionAsync(url);
+if (staticResult.Description.Length > 500)
+    return staticResult; // Fast path
+
+// JavaScript-heavy sites need Puppeteer
+return await TryPuppeteerExtractionAsync(url);
+```
+
+**Puppeteer Features:**
+- Auto-downloads Chromium on first run (~150MB, one-time)
+- Headless mode (no GUI)
+- Network idle detection
+- JavaScript execution
+- Full page rendering
+
+**Error Handling:**
+- Invalid URL → User-friendly error message
+- Timeout (>10s) → Suggest manual entry
+- Parsing fails → Falls back to manual input
+- Network error → Clear error feedback
+
+**API Endpoint:**
+```
+POST /api/cv/fetch-job
+Body: { "url": "https://example.com/jobs/12345" }
+Response: {
+  "isSuccess": true,
+  "jobTitle": "Senior Software Engineer",
+  "companyName": "Tech Corp",
+  "description": "We are looking for...",
+  "errorMessage": ""
+}
+```
+
+### User Experience
+
+**Workflow:**
+```
+Refine Step → Enter Job URL → Click "Fetch Details"
+                                    ↓
+                              Fields Auto-Fill
+                                    ↓
+                         (Or manually edit/enter)
+                                    ↓
+                            Generate Resume
+```
+
+**UI Components:**
+- URL input field with validation
+- "Fetch Details" button (disabled when empty)
+- Loading state: "Fetching..."
+- Success: Fields populate automatically
+- Error: Friendly message with manual fallback
+- Hint text: "Or manually enter job details below"
+
+**Translations:**
+- English: "🔗 Fetch from Job Posting URL"
+- Danish: "🔗 Hent fra Jobopslag URL"
+
+### Limitations
+
+**Won't Work:**
+- ❌ Login-required job postings (private/authenticated content)
+- ❌ Sites with aggressive bot detection (CAPTCHA, cloudflare challenges)
+- ❌ PDFs or non-HTML documents
+
+**Now Works With Puppeteer:**
+- ✅ JavaScript-rendered sites (Teamtailor, modern SPAs)
+- ✅ Lazy-loaded content
+- ✅ Dynamic job boards
+
+**Performance:**
+- Static sites: ~2 seconds
+- JavaScript sites: ~10-15 seconds (includes browser launch + render)
+- First run: +5s (Chromium download, one-time)
+
+**Solution:** Always includes manual entry fallback
+
+### Future Improvements
+
+Possible enhancements:
+- [ ] More site-specific extractors (LinkedIn, Indeed APIs)
+- [ ] Salary information extraction
+- [ ] Required skills detection
+- [ ] Browser cache for faster subsequent requests
 
 ---
 

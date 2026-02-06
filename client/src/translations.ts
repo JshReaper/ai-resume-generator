@@ -13,6 +13,11 @@ export interface Translations {
     stepDescription: string;
     targetJob: string;
     targetJobDescription: string;
+    jobUrlLabel: string;
+    jobUrlPlaceholder: string;
+    jobUrlHint: string;
+    fetchJobButton: string;
+    fetchingJob: string;
     jobTitlePlaceholder: string;
     jobDescPlaceholder: string;
   };
@@ -74,6 +79,11 @@ export const translations: Record<string, Translations> = {
       stepDescription: "We've analyzed your CV. Chat with AI to make improvements, or go straight to generating your enhanced resume.",
       targetJob: '🎯 Target Position (Optional)',
       targetJobDescription: 'Add a target job to tailor your resume',
+      jobUrlLabel: '🔗 Fetch from Job Posting URL',
+      jobUrlPlaceholder: 'https://example.com/jobs/12345',
+      jobUrlHint: 'Or manually enter job details below',
+      fetchJobButton: '🔍 Fetch Details',
+      fetchingJob: 'Fetching...',
       jobTitlePlaceholder: 'Job Title (e.g., Senior Software Engineer)',
       jobDescPlaceholder: 'Paste job description here for ATS optimization...'
     },
@@ -133,6 +143,11 @@ export const translations: Record<string, Translations> = {
       stepDescription: 'Vi har analyseret dit CV. Chat med AI for at lave forbedringer, eller gå direkte til at generere dit forbedrede CV.',
       targetJob: '🎯 Målstilling (Valgfri)',
       targetJobDescription: 'Tilføj et måljob for at skræddersy dit CV',
+      jobUrlLabel: '🔗 Hent fra Jobopslag URL',
+      jobUrlPlaceholder: 'https://eksempel.dk/jobs/12345',
+      jobUrlHint: 'Eller indtast jobdetaljer manuelt nedenfor',
+      fetchJobButton: '🔍 Hent Detaljer',
+      fetchingJob: 'Henter...',
       jobTitlePlaceholder: 'Jobtitel (f.eks., Senior Software Engineer)',
       jobDescPlaceholder: 'Indsæt jobbeskrivelse her for ATS-optimering...'
     },

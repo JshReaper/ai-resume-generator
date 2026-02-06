@@ -13,10 +13,11 @@
 ### 🎯 Core Functionality
 - **📄 Multi-Format Upload**: Drag & drop PDF/DOCX or paste text from LinkedIn
 - **🤖 AI Analysis**: Automatic CV parsing and content extraction
+- **🔗 Job URL Fetcher**: Auto-extract job details from posting URLs to tailor your resume
 - **✏️ Post-Generation Editor**: Edit all resume fields before downloading
 - **🌍 Dual Language**: Independent UI and CV language (English/Danish)
 - **📥 Direct PDF Export**: Download formatted PDFs without print dialog
-- **✉️ Cover Letter Generator**: AI-generated cover letters for job applications
+- **✉️ Cover Letter Generator**: AI-generated cover letters with chat refinement
 - **📱 Phone Formatting**: Automatic locale-specific number formatting
 
 ### 🔐 Privacy First
@@ -114,7 +115,8 @@ Upload CV → Refine → Generate → Edit → Download PDF
 - AI automatically extracts all information
 
 **Step 2: Refine (Optional)**
-- Add target job title/description for ATS optimization
+- **Option A**: Paste job posting URL to auto-extract details
+- **Option B**: Manually add target job title/description for ATS optimization
 - Chat with AI to improve sections
 - Review parsed information
 
@@ -239,6 +241,8 @@ npm test
 ### Backend
 - **.NET 10** - Modern C# API with minimal APIs
 - **UglyToad.PdfPig** - PDF text extraction
+- **PuppeteerSharp** - Headless Chrome for JavaScript-rendered job postings
+- **HtmlAgilityPack** - Job posting HTML parsing
 - **libphonenumber-csharp** - International phone formatting
 - **Ollama** - Local LLM inference
 - **xUnit + Moq + FluentAssertions** - Testing

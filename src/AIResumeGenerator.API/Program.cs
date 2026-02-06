@@ -13,6 +13,12 @@ builder.Services.AddHttpClient("Ollama", client =>
     client.Timeout = TimeSpan.FromMinutes(5); // 300 seconds
 });
 
+// Configure HttpClient for job posting fetcher with shorter timeout
+builder.Services.AddHttpClient<JobPostingFetcherService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10); // Quick timeout for web scraping
+});
+
 // Register CV parsing service
 builder.Services.AddScoped<ICvParserService, CvParserService>();
 builder.Services.AddSingleton<IPhoneNumberFormatter, PhoneNumberFormatter>();

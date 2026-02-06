@@ -77,3 +77,11 @@ export interface CoverLetterResponse {
   content: string;
   closing: string;
 }
+
+export interface JobPostingResult {
+  isSuccess: boolean;
+  jobTitle: string;
+  companyName: string;
+  description: string;
+  errorMessage: string;
+}

@@ -40,6 +40,8 @@ function App() {
   // Target job state
   const [targetJob, setTargetJob] = useState('');
   const [jobDescription, setJobDescription] = useState('');
+  const [jobUrl, setJobUrl] = useState('');
+  const [isFetchingJob, setIsFetchingJob] = useState(false);
 
   // Result state
   const [enhancedResume, setEnhancedResume] = useState<ResumeResponse | null>(null);
@@ -108,6 +110,36 @@ function App() {
       handleError(err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleFetchJobPosting = async () => {
+    if (!jobUrl.trim()) {
+      setError('Please enter a job posting URL');
+      return;
+    }
+
+    setIsFetchingJob(true);
+    setError(null);
+
+    try {
+      const result = await cvService.fetchJobPosting(jobUrl);
+
+      if (result.isSuccess) {
+        // Auto-populate fields with extracted data
+        if (result.jobTitle) setTargetJob(result.jobTitle);
+        if (result.description) setJobDescription(result.description);
+
+        // Show success message
+        setError(null);
+      } else {
+        // Show error message
+        setError(result.errorMessage);
+      }
+    } catch (err: any) {
+      handleError(err);
+    } finally {
+      setIsFetchingJob(false);
     }
   };
 
@@ -247,6 +279,30 @@ function App() {
             <div className="target-job-section">
               <h3>{t.refine.targetJob}</h3>
               <p>{t.refine.targetJobDescription}</p>
+
+              {/* Job URL Fetcher */}
+              <div className="job-url-section">
+                <label htmlFor="jobUrl">{t.refine.jobUrlLabel}</label>
+                <div className="job-url-input-group">
+                  <input
+                    id="jobUrl"
+                    type="url"
+                    placeholder={t.refine.jobUrlPlaceholder}
+                    value={jobUrl}
+                    onChange={(e) => setJobUrl(e.target.value)}
+                  />
+                  <button
+                    className="fetch-job-btn"
+                    onClick={handleFetchJobPosting}
+                    disabled={isFetchingJob || !jobUrl.trim()}
+                  >
+                    {isFetchingJob ? t.refine.fetchingJob : t.refine.fetchJobButton}
+                  </button>
+                </div>
+                <p className="job-url-hint">{t.refine.jobUrlHint}</p>
+              </div>
+
+              {/* Manual Entry */}
               <div className="target-inputs">
                 <input
                   type="text"
@@ -350,6 +406,8 @@ function App() {
           sessionId={sessionId}
           language={cvLanguage}
           onClose={() => setShowCoverLetter(false)}
+          initialJobTitle={targetJob}
+          initialJobDescription={jobDescription}
         />
       )}
 

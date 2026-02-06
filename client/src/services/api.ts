@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ResumeRequest, ResumeResponse } from '../types/resume';
-import { CvUploadResponse, ChatResponse, GenerateRequest, CoverLetterRequest, CoverLetterResponse } from '../types/cv';
+import { CvUploadResponse, ChatResponse, GenerateRequest, CoverLetterRequest, CoverLetterResponse, JobPostingResult } from '../types/cv';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5260';
 
@@ -77,6 +77,11 @@ export const cvService = {
 
   generateCoverLetter: async (request: CoverLetterRequest): Promise<CoverLetterResponse> => {
     const response = await api.post<CoverLetterResponse>('/api/cv/cover-letter', request);
+    return response.data;
+  },
+
+  fetchJobPosting: async (url: string): Promise<JobPostingResult> => {
+    const response = await api.post<JobPostingResult>('/api/cv/fetch-job', { url });
     return response.data;
   },
 };

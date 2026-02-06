@@ -10,15 +10,18 @@ public class CvController : ControllerBase
 {
     private readonly ICvParserService _parserService;
     private readonly ICvSessionService _sessionService;
+    private readonly JobPostingFetcherService _jobFetcher;
     private readonly ILogger<CvController> _logger;
 
     public CvController(
         ICvParserService parserService,
         ICvSessionService sessionService,
+        JobPostingFetcherService jobFetcher,
         ILogger<CvController> logger)
     {
         _parserService = parserService;
         _sessionService = sessionService;
+        _jobFetcher = jobFetcher;
         _logger = logger;
     }
 
@@ -224,6 +227,32 @@ public class CvController : ControllerBase
     }
 
     /// <summary>
+    /// Fetch job posting details from a URL
+    /// </summary>
+    [HttpPost("fetch-job")]
+    [ProducesResponseType<JobPostingResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<JobPostingResult>> FetchJobPosting(
+        [FromBody] FetchJobRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Url))
+        {
+            return BadRequest("URL is required");
+        }
+
+        try
+        {
+            var result = await _jobFetcher.FetchJobPostingAsync(request.Url);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to fetch job posting from {Url}", request.Url);
+            return StatusCode(500, "Failed to fetch job posting. Please try again.");
+        }
+    }
+
+    /// <summary>
     /// Get session data
     /// </summary>
     [HttpGet("session/{sessionId}")]
@@ -245,4 +274,9 @@ public class TextUploadRequest
     public required string Text { get; set; }
     public string? Language { get; set; }
     public string? CountryCode { get; set; }
+}
+
+public class FetchJobRequest
+{
+    public required string Url { get; set; }
 }
