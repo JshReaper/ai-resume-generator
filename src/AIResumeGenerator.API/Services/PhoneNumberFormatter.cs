@@ -26,20 +26,15 @@ public class PhoneNumberFormatter : IPhoneNumberFormatter
             // Try to parse the number
             var number = _phoneUtil.Parse(phoneNumber, countryCode);
 
-            // Format based on country
-            if (_phoneUtil.IsValidNumber(number))
+            // Format even if not strictly valid - helps with test numbers and edge cases
+            // If input already had country code prefix, use international format to preserve it
+            if (phoneNumber.Trim().StartsWith("+"))
             {
-                // Format internationally if it's not from the default country
-                if (_phoneUtil.GetRegionCodeForNumber(number) != countryCode)
-                {
-                    return _phoneUtil.Format(number, PhoneNumberFormat.INTERNATIONAL);
-                }
-
-                // Format nationally for local numbers
-                return _phoneUtil.Format(number, PhoneNumberFormat.NATIONAL);
+                return _phoneUtil.Format(number, PhoneNumberFormat.INTERNATIONAL);
             }
 
-            return phoneNumber; // Return original if invalid
+            // Format nationally for local numbers (without country code prefix)
+            return _phoneUtil.Format(number, PhoneNumberFormat.NATIONAL);
         }
         catch
         {

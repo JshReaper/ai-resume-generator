@@ -1,13 +1,16 @@
 import React, { useState, useRef, useCallback } from 'react';
+import { getTranslation } from '../translations';
 import './FileUpload.css';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
   onTextPaste: (text: string) => void;
   isLoading: boolean;
+  language: string;
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, onTextPaste, isLoading }) => {
+export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, onTextPaste, isLoading, language }) => {
+  const t = getTranslation(language);
   const [isDragging, setIsDragging] = useState(false);
   const [showTextInput, setShowTextInput] = useState(false);
   const [pastedText, setPastedText] = useState('');
@@ -73,8 +76,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, onTextPast
     return (
       <div className="upload-loading">
         <div className="loading-spinner"></div>
-        <h3>Analyzing your CV...</h3>
-        <p>Our AI is extracting and parsing your information</p>
+        <h3>{t.fileUpload.analyzingTitle}</h3>
+        <p>{t.fileUpload.analyzingText}</p>
       </div>
     );
   }
@@ -99,14 +102,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, onTextPast
             />
             <div className="dropzone-content">
               <div className="upload-icon">📄</div>
-              <h3>Drop your CV here</h3>
-              <p>or click to browse</p>
-              <span className="file-types">Supports PDF & DOCX</span>
+              <h3>{t.fileUpload.dropHere}</h3>
+              <p>{t.fileUpload.orClick}</p>
+              <span className="file-types">{t.fileUpload.supports}</span>
             </div>
           </div>
 
           <div className="upload-divider">
-            <span>or</span>
+            <span>{t.fileUpload.or}</span>
           </div>
 
           <button
@@ -114,7 +117,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, onTextPast
             onClick={() => setShowTextInput(true)}
           >
             <span className="paste-icon">📋</span>
-            Paste from LinkedIn or text
+            {t.fileUpload.pasteButton}
           </button>
         </>
       ) : (
@@ -123,14 +126,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, onTextPast
             className="back-button"
             onClick={() => setShowTextInput(false)}
           >
-            ← Back to file upload
+            {t.fileUpload.backButton}
           </button>
-          <h3>Paste your CV content</h3>
-          <p className="hint">Copy your LinkedIn profile, existing resume text, or any career information</p>
+          <h3>{t.fileUpload.pasteTitle}</h3>
+          <p className="hint">{t.fileUpload.pasteHint}</p>
           <textarea
             value={pastedText}
             onChange={(e) => setPastedText(e.target.value)}
-            placeholder="Paste your CV/LinkedIn content here...
+            placeholder={t.fileUpload.placeholder + `
 
 Example:
 John Doe
@@ -145,20 +148,20 @@ Senior Developer - Tech Corp (2020 - Present)
 • Mentored team of 5 junior developers
 
 Education
-BS Computer Science - University of Technology (2018)"
+BS Computer Science - University of Technology (2018)`}
             rows={15}
           />
           <div className="text-submit-row">
             <span className="char-count">
-              {pastedText.length} characters
-              {pastedText.length > 0 && pastedText.length < 50 && ' (minimum 50)'}
+              {pastedText.length} {t.fileUpload.characters}
+              {pastedText.length > 0 && pastedText.length < 50 && ` (${t.fileUpload.minimum})`}
             </span>
             <button
               className="submit-text-button"
               onClick={handleTextSubmit}
               disabled={pastedText.trim().length < 50}
             >
-              Analyze Content
+              {t.fileUpload.analyzeButton}
             </button>
           </div>
         </div>

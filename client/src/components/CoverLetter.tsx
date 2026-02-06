@@ -49,7 +49,15 @@ export const CoverLetter: React.FC<CoverLetterProps> = ({
   };
 
   const handleExport = () => {
-    exportCoverLetterToPdf(`cover-letter-${companyName.replace(/\s+/g, '-')}.pdf`);
+    if (!coverLetter) return;
+
+    const fullContent = `${coverLetter.salutation}\n\n${coverLetter.content}\n\n${coverLetter.closing}`;
+
+    exportCoverLetterToPdf(
+      fullContent,
+      language,
+      `cover-letter-${companyName.replace(/\s+/g, '-')}.pdf`
+    );
   };
 
   return (

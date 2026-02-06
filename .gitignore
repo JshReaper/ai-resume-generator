@@ -62,6 +62,10 @@ appsettings.Development.json
 # Test results
 TestResults/
 coverage/
-#user generated
-pdf outputs/
+
+# User generated content
+pdf outputs/       # Only ignore this specific folder
+# Note: Other PDFs (like test samples) will still be visible with @ autocomplete
+
+# Temporary files
 nul

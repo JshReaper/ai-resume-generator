@@ -40,6 +40,22 @@ export interface Translations {
     keywords: string;
     present: string;
   };
+  fileUpload: {
+    dropHere: string;
+    orClick: string;
+    supports: string;
+    or: string;
+    pasteButton: string;
+    backButton: string;
+    pasteTitle: string;
+    pasteHint: string;
+    placeholder: string;
+    characters: string;
+    minimum: string;
+    analyzeButton: string;
+    analyzingTitle: string;
+    analyzingText: string;
+  };
 }
 
 export const translations: Record<string, Translations> = {
@@ -84,6 +100,22 @@ export const translations: Record<string, Translations> = {
       skills: 'Skills',
       keywords: 'Keywords',
       present: 'Present'
+    },
+    fileUpload: {
+      dropHere: 'Drop your CV here',
+      orClick: 'or click to browse',
+      supports: 'Supports PDF & DOCX',
+      or: 'or',
+      pasteButton: 'Paste from LinkedIn or text',
+      backButton: '← Back to file upload',
+      pasteTitle: 'Paste your CV content',
+      pasteHint: 'Copy your LinkedIn profile, existing resume text, or any career information',
+      placeholder: 'Paste your CV/LinkedIn content here...',
+      characters: 'characters',
+      minimum: 'minimum 50',
+      analyzeButton: 'Analyze Content',
+      analyzingTitle: 'Analyzing your CV...',
+      analyzingText: 'Our AI is extracting and parsing your information'
     }
   },
   da: {
@@ -121,12 +153,28 @@ export const translations: Record<string, Translations> = {
       text: 'Bygget med .NET, React & Ollama | 100% Lokal AI - Dine data forlader aldrig din maskine'
     },
     template: {
-      professionalSummary: 'Professionel Sammenfatning',
+      professionalSummary: 'faglig profil',
       experience: 'Erfaring',
       education: 'Uddannelse',
       skills: 'Færdigheder',
       keywords: 'Nøgleord',
       present: 'Nu'
+    },
+    fileUpload: {
+      dropHere: 'Slip dit CV her',
+      orClick: 'eller klik for at gennemse',
+      supports: 'Understøtter PDF & DOCX',
+      or: 'eller',
+      pasteButton: 'Indsæt fra LinkedIn eller tekst',
+      backButton: '← Tilbage til filupload',
+      pasteTitle: 'Indsæt dit CV-indhold',
+      pasteHint: 'Kopier din LinkedIn-profil, eksisterende CV-tekst eller karriereinformation',
+      placeholder: 'Indsæt dit CV/LinkedIn-indhold her...',
+      characters: 'tegn',
+      minimum: 'minimum 50',
+      analyzeButton: 'Analyser Indhold',
+      analyzingTitle: 'Analyserer dit CV...',
+      analyzingText: 'Vores AI udtrækker og parser dine informationer'
     }
   }
 };

@@ -5,6 +5,7 @@ import { ChatInterface } from './components/ChatInterface';
 import { DualLanguageSelector } from './components/DualLanguageSelector';
 import { ResumeTemplate, TemplateSelector } from './components/ResumeTemplates';
 import { CoverLetter } from './components/CoverLetter';
+import { ResumeEditor } from './components/ResumeEditor';
 import { cvService } from './services/api';
 import { CvUploadResponse, ChatMessage, ParsedCvData } from './types/cv';
 import { ResumeResponse } from './types/resume';
@@ -43,6 +44,7 @@ function App() {
   // Result state
   const [enhancedResume, setEnhancedResume] = useState<ResumeResponse | null>(null);
   const [showCoverLetter, setShowCoverLetter] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // Get translations
   const t = getTranslation(uiLanguage);
@@ -156,8 +158,29 @@ function App() {
   };
 
   const handleExportPdf = () => {
-    const filename = `resume-${parsedData?.fullName?.replace(/\s+/g, '-') || 'download'}.pdf`;
-    exportResumeToPdf(filename);
+    if (!parsedData || !enhancedResume) return;
+
+    const filename = `resume-${parsedData.fullName?.replace(/\s+/g, '-') || 'download'}.pdf`;
+    exportResumeToPdf({
+      cvData: parsedData,
+      resumeData: enhancedResume,
+      language: cvLanguage,
+      filename
+    });
+  };
+
+  const handleEditResume = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveEdit = (updatedCvData: ParsedCvData, updatedResumeData: ResumeResponse) => {
+    setParsedData(updatedCvData);
+    setEnhancedResume(updatedResumeData);
+    setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
   };
 
   return (
@@ -201,6 +224,7 @@ function App() {
               onFileSelect={handleFileSelect}
               onTextPaste={handleTextPaste}
               isLoading={isLoading}
+              language={uiLanguage}
             />
           </div>
         )}
@@ -263,44 +287,59 @@ function App() {
         {/* Step 3: Result */}
         {step === 'result' && enhancedResume && parsedData && (
           <div className="result-step">
-            <div className="step-intro">
-              <h2>{t.result.stepTitle}</h2>
-              <p>{t.result.stepDescription}</p>
-            </div>
-
-            <div className="result-content">
-              <ResumeTemplate
+            {isEditing ? (
+              <ResumeEditor
                 cvData={parsedData}
                 resumeData={enhancedResume}
-                template={selectedTemplate}
                 language={cvLanguage}
+                onSave={handleSaveEdit}
+                onCancel={handleCancelEdit}
               />
-            </div>
+            ) : (
+              <>
+                <div className="step-intro">
+                  <h2>{t.result.stepTitle}</h2>
+                  <p>{t.result.stepDescription}</p>
+                </div>
 
-            <div className="result-actions">
-              <button className="btn-secondary" onClick={() => setStep('refine')}>
-                {t.result.backButton}
-              </button>
-              <button className="btn-primary" onClick={handleExportPdf}>
-                {t.result.downloadButton}
-              </button>
-              <button className="btn-accent" onClick={() => setShowCoverLetter(true)}>
-                {t.result.coverLetterButton}
-              </button>
-            </div>
+                <div className="result-content">
+                  <ResumeTemplate
+                    cvData={parsedData}
+                    resumeData={enhancedResume}
+                    template={selectedTemplate}
+                    language={cvLanguage}
+                  />
+                </div>
 
-            <div className="skills-legend">
-              <p>
-                <span className="legend-item">
-                  <span className="skill-tag">Your Skills</span>
-                  {t.result.existingSkills}
-                </span>
-                <span className="legend-item">
-                  <span className="skill-tag suggested">New Skills</span>
-                  {t.result.suggestedSkills}
-                </span>
-              </p>
-            </div>
+                <div className="result-actions">
+                  <button className="btn-secondary" onClick={() => setStep('refine')}>
+                    {t.result.backButton}
+                  </button>
+                  <button className="btn-accent" onClick={handleEditResume}>
+                    ✏️ Edit Resume
+                  </button>
+                  <button className="btn-primary" onClick={handleExportPdf}>
+                    {t.result.downloadButton}
+                  </button>
+                  <button className="btn-accent" onClick={() => setShowCoverLetter(true)}>
+                    {t.result.coverLetterButton}
+                  </button>
+                </div>
+
+                <div className="skills-legend">
+                  <p>
+                    <span className="legend-item">
+                      <span className="skill-tag">Your Skills</span>
+                      {t.result.existingSkills}
+                    </span>
+                    <span className="legend-item">
+                      <span className="skill-tag suggested">New Skills</span>
+                      {t.result.suggestedSkills}
+                    </span>
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         )}
       </main>

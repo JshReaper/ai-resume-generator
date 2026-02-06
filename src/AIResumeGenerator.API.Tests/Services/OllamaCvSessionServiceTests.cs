@@ -243,7 +243,7 @@ public class OllamaCvSessionServiceTests
     }
 
     [Fact]
-    public void ProcessUploadedCvAsync_OllamaNotResponding_ThrowsHttpRequestException()
+    public async Task ProcessUploadedCvAsync_OllamaNotResponding_ThrowsHttpRequestException()
     {
         // Arrange
         var cvText = "Test CV";
@@ -266,7 +266,7 @@ public class OllamaCvSessionServiceTests
         );
 
         // Act & Assert
-        Assert.ThrowsAsync<HttpRequestException>(
+        await Assert.ThrowsAsync<HttpRequestException>(
             () => service.ProcessUploadedCvAsync(cvText, "en", "DK")
         );
     }
